@@ -69,16 +69,12 @@ require("formatter").setup({
 			require("formatter.filetypes.python").black,
 			-- Config for python filetypes in general
 			function()
-				return {
-					exe = "black",
-					args = {
-						"-q",
-						"--stdin-filename",
-						util.escape_path(util.get_current_buffer_file_name()),
-						"-",
-					},
-					stdin = true,
-				}
+				vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+					pattern = "*.py",
+					callback = function()
+						vim.cmd("black")
+					end,
+				})
 			end,
 		},
 

@@ -1,4 +1,5 @@
 local builtin = require("telescope.builtin")
+local tele = require("telescope")
 
 -- find files locally
 vim.keymap.set("n", "<leader>pf", builtin.find_files, {})
@@ -17,3 +18,13 @@ end, { desc = "[/] Fuzzily search in current buffer" })
 vim.keymap.set("n", "<leader>sn", function()
 	builtin.find_files({ cwd = vim.fn.stdpath("config") })
 end, { desc = "[S]earch in [N]eovim files" })
+
+-- Telescope blind to symlinks
+-- Vysor for nvim
+tele.setup({
+	pickers = {
+		find_files = {
+			follow = true,
+		},
+	},
+})

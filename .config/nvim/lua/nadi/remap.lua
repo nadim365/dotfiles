@@ -28,3 +28,8 @@ vim.keymap.set("v", "<leader>d", '"_d')
 
 vim.keymap.set("n", "Q", "<nop>")
 vim.keymap.set("t", "<ESC>", "<C-\\><C-n>:buffer#<CR>", { noremap = true })
+
+vim.keymap.set("n", "<leader>db", "<cmd> DapToggleBreakpoint <CR>")
+vim.keymap.set("n", "<leader>dpr", function()
+	require("dap-python").test_method()
+end)

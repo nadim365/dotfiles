@@ -72,13 +72,24 @@ return require("packer").startup(function(use)
 	use("mhartington/formatter.nvim")
 	use("mfussenegger/nvim-lint")
 	use("mfussenegger/nvim-dap")
+	use("mfussenegger/nvim-dap-python")
 	use({
 		"rcarriga/nvim-dap-ui",
-		requires = { "mfussenegger/nvim-dap" },
+		requires = {
+			{ "mfussenegger/nvim-dap" },
+			{ "nvim-neotest/nvim-nio" },
+		},
+	})
+	use({
+		"OXY2DEV/markview.nvim",
+		requires = {
+			"nvim-treesitter/nvim-treesitter",
+			"nvim-tree/nvim-web-devicons",
+		},
 	})
 
 	-- Async neovim IO library:
-	use({ "nvim-neotest/nvim-nio" })
+	--use({ "nvim-neotest/nvim-nio" })
 	-- Platform Specific Tools:
 	use("hsanson/vim-android")
 

@@ -75,7 +75,6 @@ require("mason-lspconfig").setup({
 		"jsonls",
 		"lua_ls",
 		"marksman",
-		--"pylsp",
 		"pyright",
 		"sqls",
 		"kotlin_language_server",
@@ -85,6 +84,20 @@ require("mason-lspconfig").setup({
 	},
 })
 
+require("mason-tool-installer").setup({
+	ensure_installed = {
+		"black",
+		"debugpy",
+		"flake8",
+		"isort",
+		"mypy",
+		"pylint",
+	},
+	integrations = {
+		["mason-lspconfig"] = true,
+		["mason-nvim-dap"] = true,
+	},
+})
 -- Hooking up Language Servers installed from Mason to Neovim LSP client
 local lspconfig = require("lspconfig")
 require("neodev").setup({})
