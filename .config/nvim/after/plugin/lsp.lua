@@ -62,6 +62,7 @@ end
 
 -- LSP setup ( mason and mason-lspconfig)
 -- Downloading and configuring language servers
+require("neodev").setup({})
 require("mason").setup({})
 require("mason-lspconfig").setup({
 	ensure_installed = {
@@ -100,7 +101,6 @@ require("mason-tool-installer").setup({
 })
 -- Hooking up Language Servers installed from Mason to Neovim LSP client
 local lspconfig = require("lspconfig")
-require("neodev").setup({})
 lspconfig.lua_ls.setup({
 	require("lspconfig").lua_ls.setup({
 		capabilities = lsp_capabilities,
@@ -124,15 +124,11 @@ lspconfig.lua_ls.setup({
 		},
 	}),
 })
+
+-- Lang. Specific configs:
 lspconfig.kotlin_language_server.setup({
 	capabilities = lsp_capabilities,
 })
---lspconfig.pylsp.setup({
---	capabilities = lsp_capabilities,
---})
---lspconfig.jedi_language_server.setup({
---capabilities = lsp_capabilities,
---})
 lspconfig.pyright.setup({
 	capabilities = lsp_capabilities,
 })

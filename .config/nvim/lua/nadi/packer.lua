@@ -35,7 +35,7 @@ return require("packer").startup(function(use)
 	use("tpope/vim-fugitive")
 	use({
 		"nvim-telescope/telescope.nvim",
-		tag = "0.1.5",
+		tag = "0.1.8",
 		-- or                            , branch = '0.1.x',
 		requires = { { "nvim-lua/plenary.nvim" } },
 	})
@@ -65,6 +65,7 @@ return require("packer").startup(function(use)
 	use("folke/neodev.nvim")
 
 	-- Convenience Tools:
+	use("lukas-reineke/indent-blankline.nvim")
 	use({
 		"nvim-lualine/lualine.nvim",
 		requires = { "nvim-tree/nvim-web-devicons", opt = true },
