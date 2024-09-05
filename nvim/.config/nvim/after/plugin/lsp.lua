@@ -4,11 +4,11 @@
 --float = { border = "rounded" },
 --})
 vim.keymap.set("n", "gl", "<cmd>lua vim.diagnostic.open_float()<cr>")
+
 vim.keymap.set("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<cr>")
 vim.keymap.set("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<cr>")
 
 vim.api.nvim_create_autocmd("LspAttach", {
-	desc = "LSP actions",
 	callback = function(event)
 		local opts = { buffer = event.buf }
 
@@ -50,8 +50,32 @@ vim.api.nvim_create_autocmd("LspAttach", {
 	end,
 })
 
+vim.api.nvim_create_autocmd("LspAttach", {
+	group = vim.api.nvim_create_augroup("lsp_attach_disable_ruff_hover", { clear = true }),
+	callback = function(args)
+		local client = vim.lsp.get_client_by_id(args.data.client_id)
+		if client == nil then
+			return
+		end
+
+		if client.name == "ruff" then
+			-- Disable hover in favor of pyright
+			client.server_capabilities.hoverProvider = false
+		end
+	end,
+	desc = "LSP : Disable hover capability from Ruff",
+})
+
 -- Setting Up LspCofig
 local lsp_capabilities = vim.lsp.protocol.make_client_capabilities()
+lsp_capabilities.textDocument.completion.completionItem.snippetSupport = true
+lsp_capabilities.textDocument.completion.completionItem.resolveSupport = {
+	properties = {
+		"documentation",
+		"detail",
+		"additionalTextEdits",
+	},
+}
 lsp_capabilities = vim.tbl_deep_extend("force", lsp_capabilities, require("cmp_nvim_lsp").default_capabilities())
 
 local default_setup = function(server)
@@ -102,35 +126,47 @@ require("mason-tool-installer").setup({
 -- Hooking up Language Servers installed from Mason to Neovim LSP client
 local lspconfig = require("lspconfig")
 lspconfig.lua_ls.setup({
-	require("lspconfig").lua_ls.setup({
-		capabilities = lsp_capabilities,
-		settings = {
-			Lua = {
-				runtime = {
-					version = "LuaJIT",
-				},
-				diagnostics = {
-					globals = { "vim" },
-				},
-				completion = {
-					callSnippet = "Replace",
-				},
-				workspace = {
-					library = {
-						vim.env.VIMRUNTIME,
-					},
+	capabilities = lsp_capabilities,
+	settings = {
+		Lua = {
+			runtime = {
+				version = "LuaJIT",
+			},
+			diagnostics = {
+				globals = { "vim" },
+			},
+			completion = {
+				callSnippet = "Replace",
+			},
+			workspace = {
+				library = {
+					vim.api.nvim_get_runtime_file("", true),
 				},
 			},
+			telemetry = {
+				enable = false,
+			},
 		},
-	}),
+	},
 })
 
 -- Lang. Specific configs:
+
 lspconfig.kotlin_language_server.setup({
 	capabilities = lsp_capabilities,
 })
 lspconfig.pyright.setup({
 	capabilities = lsp_capabilities,
+	settings = {
+		pyright = {
+			disableOrganizeImports = true,
+		},
+		python = {
+			analysis = {
+				ignore = { "*" },
+			},
+		},
+	},
 })
 lspconfig.jdtls.setup({
 	capabilities = lsp_capabilities,

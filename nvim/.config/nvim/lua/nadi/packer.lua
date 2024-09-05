@@ -71,7 +71,14 @@ return require("packer").startup(function(use)
 		requires = { "nvim-tree/nvim-web-devicons", opt = true },
 	})
 	use("mhartington/formatter.nvim")
-	use("mfussenegger/nvim-lint")
+	--	use("mfussenegger/nvim-lint")
+	use({
+		"nvimtools/none-ls.nvim",
+		config = function()
+			require("null-ls").setup()
+		end,
+		requires = { "nvim-lua/plenary.nvim" },
+	})
 	use("mfussenegger/nvim-dap")
 	use("mfussenegger/nvim-dap-python")
 	use({
